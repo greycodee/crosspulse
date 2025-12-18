@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CrossPulse
+
+A real-time multi-chain blockchain monitoring dashboard with a retro terminal
+aesthetic.
+
+![CrossPulse](https://img.shields.io/badge/version-1.4-blue)
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+
+![](./index.jpg)
+
+## Features
+
+- **6 Chain Support** - Monitor Ethereum, Solana, SUI, BNB Chain, Polygon, and
+  Avalanche simultaneously
+- **Real-time Block Height** - Live tracking of the latest block/slot/checkpoint
+  for each chain
+- **Latency Monitoring** - RPC response time measurement for each network
+- **Health Status** - Visual indicators for healthy, stalled, or error states
+- **System Logs** - Live event feed with color-coded messages
+- **Retro CRT Aesthetic** - Nostalgic terminal-style UI with scan lines effect
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **Icons**: Lucide React
+
+## Supported Chains
+
+| Chain       | Symbol | RPC Endpoint      |
+| ----------- | ------ | ----------------- |
+| Ethereum    | ETH    | BlastAPI          |
+| Solana      | SOL    | DRPC              |
+| SUI Network | SUI    | Official Fullnode |
+| BNB Chain   | BSC    | LlamaRPC          |
+| Polygon     | MATIC  | LlamaRPC          |
+| Avalanche   | AVAX   | DRPC              |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- pnpm (recommended)
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clone the repository
+git clone https://github.com/yourusername/crosspulse.git
+cd crosspulse
+
+# Install dependencies
+pnpm install
+
+# Start development server
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the dashboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm build
+pnpm start
+```
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+### Cloudflare Pages
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Connect your GitHub repository to Cloudflare Pages
+2. Configure build settings:
+   - **Build command**: `pnpm build`
+   - **Build output directory**: `.next`
+   - **Framework preset**: Next.js
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Vercel
 
-## Deploy on Vercel
+```bash
+npx vercel
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Configuration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Chain configurations can be modified in `app/page.tsx`:
+
+```typescript
+const CHAIN_CONFIGS = [
+    {
+        id: "eth",
+        name: "ETHEREUM",
+        symbol: "ETH",
+        rpc: "https://eth-mainnet.public.blastapi.io",
+        threshold: 30, // seconds before marking as stalled
+        // ...
+    },
+    // ...
+];
+```
+
+## License
+
+MIT
+
+## Author
+
+Built with ⚡ for the Web3 community
