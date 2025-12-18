@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { 
-  Activity, 
-  ShieldCheck, 
-  AlertTriangle, 
-  RefreshCcw, 
-  Cpu, 
-  Zap, 
+import {
+  Activity,
+  ShieldCheck,
+  AlertTriangle,
+  RefreshCcw,
+  Cpu,
+  Zap,
   History,
   Globe,
   Terminal,
@@ -17,8 +17,20 @@ import {
   Layers
 } from 'lucide-react';
 
+// 链 ID 类型定义
+type ChainId = 'eth' | 'sol' | 'sui' | 'bsc' | 'polygon' | 'avax';
+
 // 6 条链配置信息
-const CHAIN_CONFIGS = [
+const CHAIN_CONFIGS: Array<{
+  id: ChainId;
+  name: string;
+  symbol: string;
+  icon: React.ReactElement;
+  rpc: string;
+  threshold: number;
+  color: string;
+  accent: string;
+}> = [
   {
     id: 'eth',
     name: 'ETHEREUM',
@@ -91,7 +103,14 @@ export default function App() {
     avax: { height: 0, lastUpdate: Date.now(), status: 'connecting', latency: 0, history: [] }
   });
   
-  const [logs, setLogs] = useState([]);
+  interface LogEntry {
+    id: string;
+    time: string;
+    message: string;
+    type: 'info' | 'success' | 'error' | 'warning';
+  }
+  
+  const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isAutoRefresh, setIsAutoRefresh] = useState(true);
   
   const nodeDataRef = useRef(nodeData);
@@ -99,21 +118,23 @@ export default function App() {
     nodeDataRef.current = nodeData;
   }, [nodeData]);
 
-  const addLog = useCallback((message, type = 'info') => {
+  const addLog = useCallback((message: string, type: 'info' | 'success' | 'error' | 'warning' = 'info') => {
     const newLog = {
       id: Math.random().toString(36).substr(2, 9),
       time: new Date().toLocaleTimeString(),
-      message: typeof message === 'string' ? message : JSON.stringify(message),
+      message,
       type
     };
     setLogs(prev => [newLog, ...prev].slice(0, 30));
   }, []);
 
   // --- 抓取逻辑 ---
-  const fetchNodeUpdate = useCallback(async (chainId) => {
+  const fetchNodeUpdate = useCallback(async (chainId: ChainId) => {
     const config = CHAIN_CONFIGS.find(c => c.id === chainId);
+    if (!config) return;
+
     const startTime = Date.now();
-    
+
     try {
       let currentHeight = 0;
       // 判断是否为 EVM 兼容链 (ETH, BSC, Polygon, AVAX)
